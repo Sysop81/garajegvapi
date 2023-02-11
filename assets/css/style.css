@@ -1,0 +1,49 @@
+
+/* Header */
+
+.header-title-text{
+    color: #016CA2;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.header-title-text-app{
+    color:white;
+    font-weight: bold;
+    font-size: 0.8em;
+    margin-bottom: 0 !important;
+}
+
+.header-container-format{
+    border-bottom: 1px solid white;
+    background-color: #006AC1;
+}
+
+
+/* Formularios */
+.separadorApartadosFormulario{
+    margin-top: 5px;
+    border-bottom: 2px solid black;
+}
+
+/* Tablas */
+.thead-color{
+    background-color: #006ac1;
+    color:#ffffff;
+}
+
+/* Tamaño letra tablas */
+.table-font-size{
+    font-size: 0.9em;
+}
+
+
+/* Tabs */
+#tabs.ui-widget-content,
+#tabs.ui-widget-content{
+    border:none;
+}
+#tabs.ui-widget-content,
+#tabs.ui-widget-content{
+    background-color: transparent;
+}

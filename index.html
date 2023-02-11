@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS --> <!--https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.css"  crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="assets/css/style.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="js/indexcontroller.js"></script>
+
+    <!-- Favicon -->
+    <link rel="shorcut icon" href="assets/img/logo_modulo_garaje.png">
+    <title>Garaje GV</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+        <div class="row header-container-format">
+          <div class="col-3">
+            <p class="header-title-text-app">CLIENTE ODOO.ERP</p>
+          </div>
+          <div class="col-9 d-flex justify-content-center align-items-center">
+            <p class="header-title-text-app text-center">AUTOS GUILLÉN - VALENCIA</p>
+          </div>
+        </div>
+        <div id="app">
+          <div class="col-12 mt-2 text-center">
+            <h4 style="color: #006ac1; font-weight: bold;">API XML-RPC Garaje GV</span></h4>
+          </div>
+            <div id="tabs">
+              <ul>
+                <li><a href="#configuracion"><i class="fas fa-cog"></i> <span class="d-none d-md-inline">Configuración</span></a></li>
+                <li><a href="#consumibles"><i class="fas fa-boxes-stacked"></i> <span class="d-none d-md-inline">Consumibles</span></a></li>
+                <li><a href="#mecanicos"><i class="fas fa-user"></i> <span class="d-none d-md-inline">Mecánicos</span></a></li>
+                <li><a href="#vehiculos"><i class="fas fa-car-side"></i> <span class="d-none d-md-inline">Vehículos</span></a></li>
+                <li><a href="#revisiones"><i class="fas fa-screwdriver-wrench"></i> <span class="d-none d-md-inline">Revisiones</span></a></li>
+              </ul>
+              <!-- Tab Configuración acceso -->
+              <div id="configuracion">
+                <h4 class="separadorApartadosFormulario">Conexión con Odoo ERP</h4>
+                <form>
+                  <div class="row">
+                    <div class="col-12">
+                      <input type="text" class="form-control form-control-sm" id="ip" name="ip" v-model="configuracion.ip" placeholder="Ip Servidor">
+                    </div>
+                    <div class="col-12 mt-2">
+                      <input type="text" class="form-control form-control-sm" id="port" name="port" v-model="configuracion.port" placeholder="Puerto Servidor">
+                    </div>
+                    <div class="col-12 mt-2">
+                      <input type="text" class="form-control form-control-sm" id="db" name="bd" v-model="configuracion.bd" placeholder="Nombre de la base de datos">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 mt-2">
+                      <input type="text" class="form-control form-control-sm" id="user" name="user" v-model="configuracion.user" placeholder="Usuario">
+                    </div>
+                    <div class="col-12 mt-2">
+                      <input type="password" class="form-control form-control-sm" id="pass" name="pass" v-model="configuracion.pass" placeholder="Password">
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <div class="col-4 col-md-7 d-flex align-items-end">
+                      <Button id="saveConfig" @click.prevent="guardarConfiguracion" name="saveConfig" class="btn btn-sm btn-success me-2" data-toggle="tooltip" title="Guardar" :disabled="!isCorrectCredentials"><i class="fa fa-save"></i> <span class="d-none d-md-inline">Guardar</span></Button>
+                      <Button id="testConection" @click.prevent="probarConexion" name="testConection" class="btn btn-sm btn-primary" data-toggle="tooltip" title="Probar conexión"><i class="fa fa-plug"></i> <span class="d-none d-md-inline">Probar conexión</span></Button>
+                    </div>
+                    <div class="col-8 col-md-5">
+                      <span  v-if="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Espere un momento.....</span>
+                      <span v-if="showStatusCon"><span v-if="isConected"><i class="fa-solid fa-thumbs-up" style="color:darkgreen"></i> Conectado con Odoo</span> <span v-else><i class="fa-regular fa-thumbs-down" style="color:darkred"></i> No Conectado con Odoo</span></span>
+                    </div>
+                    <div class="col-12 mt-1">
+                      <div style="background-color: rgb(112, 164, 112); border-radius:5px;">
+                        <span v-if="showSaveOk" style="color:white; padding: 5px;"><i class="fa-solid fa-check"></i> Credenciales almacenadas con éxito</span>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <h4 class="separadorApartadosFormulario mt-4">Carga de datos iniciales</h4>
+                <form class="mt-2">
+                  <div class="row">
+                    <div class="col-12 mb-1 d-flex align-items-end">
+                      <Button id="loadDataConsumibles" @click.prevent="cargarConsumibles" name="loadDataConsumibles" style="width: 100%; text-align: left;" class="btn btn-sm btn-secondary me-2" data-toggle="tooltip" title="Cargar datos consumibles"><i class="fa fa-upload"></i> Consumibles</Button>
+                      <div v-if="!loadingSetData.consumibles.initial">
+                        <span v-if="!loadingSetData.consumibles.loading && loadingSetData.consumibles.loaded" class="btn btn-sm btn-success" style="font-size: 1em;"><i class="fa-solid fa-check"></i></span>
+                        <span v-if="!loadingSetData.consumibles.loading && !loadingSetData.consumibles.loaded" class="btn btn-sm btn-danger" style="font-size: 1em;"><i class="fa-solid fa-times"></i></span>
+                      </div>
+                    </div>
+                    <div class="col-12 mb-2 d-flex align-items-end">
+                      <Button id="loadDataMecanicos" @click.prevent="cargarMecanicos" name="loadDataMecanicos" style="width: 100%; text-align: left;" class="btn btn-sm btn-secondary me-2" data-toggle="tooltip" title="Cargar datos mecanicos"><i class="fa fa-upload"></i> Mecanícos</Button>
+                      <div v-if="!loadingSetData.mecanicos.initial">
+                        <span v-if="!loadingSetData.mecanicos.loading && loadingSetData.mecanicos.loaded" class="btn btn-sm btn-success" style="font-size: 1em;"><i class="fa-solid fa-check"></i></span>
+                        <span v-if="!loadingSetData.mecanicos.loading && !loadingSetData.mecanicos.loaded" class="btn btn-sm btn-danger" style="font-size: 1em;"><i class="fa-solid fa-times"></i></span>
+                      </div>  
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- Tab consumibles -->
+              <div id="consumibles">
+                <div class="row">
+                  <div class="col-12">
+                    <table id="tablaConsumibles" class="table table-font-size">
+                      <thead class="thead-color sticky-top">
+                      <tr>
+                          <th scope="col">Código</th>
+                          <th scope="col">Producto </th>
+                          <th scope="col">PVP</th>
+                      </tr>
+                      </thead>
+                      <tbody id="contentTableProduct">
+                          <!--tr v-if="tableLoader"><td colspan="6" class="text-center"><span style="font-size: 2rem; --fa-primary-color: #0e396f; --fa-secondary-color: #0e396f;" class="fad fa-spinner-third fa-spin text-center w-full"></span></td></tr>
+                          <tr v-else-if="productos.length == 0" v-cloak><td colspan="6" class="text-center">Sin productos que mostrar</td></tr-->
+                          <tr v-for="(consumible,i) in consumibles" :key="i" v-cloak>
+                              <td>{{ consumible.codigo }}</td>
+                              <td>{{ consumible.nombre }}</td>
+                              <td>{{ consumible.pvp }}€</td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+              <!-- Tab mecanicos -->
+              <div id="mecanicos">
+                <div class="row">
+                  <div class="col-12">
+                    <table id="tablaMecanicos" class="table table-font-size">
+                      <thead class="thead-color sticky-top">
+                      <tr>
+                          <th scope="col">DNI</th>
+                          <th scope="col">Nombre </th>
+                          <th scope="col">Cargo</th>
+                      </tr>
+                      </thead>
+                      <tbody id="contentTableMecanicos">
+                          <!--tr v-if="tableLoader"><td colspan="6" class="text-center"><span style="font-size: 2rem; --fa-primary-color: #0e396f; --fa-secondary-color: #0e396f;" class="fad fa-spinner-third fa-spin text-center w-full"></span></td></tr>
+                          <tr v-else-if="productos.length == 0" v-cloak><td colspan="6" class="text-center">Sin productos que mostrar</td></tr-->
+                          <tr v-for="(mecanico,i) in mecanicos" :key="i" v-cloak :class="{ 'text-danger': !mecanico.activo }">
+                              <td>{{ mecanico.dni }}</td>
+                              <td>{{ mecanico.nombre + " " + mecanico.apellido1 + " " + mecanico.apellido2}}</td>
+                              <td>{{ formatearCargo(mecanico.cargo) }}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+              <!-- Tab revisiones -->
+              <div id="vehiculos">
+                <div class="row">
+                  <div class="col-12">
+                    <table id="tablaVehiculos" class="table table-font-size">
+                      <thead class="thead-color sticky-top">
+                      <tr>
+                          <th scope="col">Bastidor</th>
+                          <th scope="col">Marca - Modelo </th>
+                          <th scope="col">Matrícula</th>
+                      </tr>
+                      </thead>
+                      <tbody id="contentTableVehiculos">
+                          <!--tr v-if="tableLoader"><td colspan="6" class="text-center"><span style="font-size: 2rem; --fa-primary-color: #0e396f; --fa-secondary-color: #0e396f;" class="fad fa-spinner-third fa-spin text-center w-full"></span></td></tr>
+                          <tr v-else-if="productos.length == 0" v-cloak><td colspan="6" class="text-center">Sin productos que mostrar</td></tr-->
+                          <tr v-for="(vehiculo,i) in vehiculos" :key="i" v-cloak :class="{ 'text-danger': !vehiculo.activo }">
+                              <td>{{ vehiculo.bastidor }}</td>
+                              <td>{{ vehiculo.marca + " " + vehiculo.modelo }}</td>
+                              <td>{{ vehiculo.matricula }}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+              <!-- Tab revisiones -->
+              <div id="revisiones">
+                <div class="row">
+                  <div class="col-12">
+                    <table id="tablaRevisiones" class="table table-font-size">
+                      <thead class="thead-color sticky-top">
+                      <tr>
+                          <th scope="col">Fecha</th>
+                          <th scope="col">Bastidor </th>
+                          <th scope="col">Mecánico</th>
+                          <th scope="col">PVP</th>
+                      </tr>
+                      </thead>
+                      <tbody id="contentTableRevisiones">
+                          <!--tr v-if="tableLoader"><td colspan="6" class="text-center"><span style="font-size: 2rem; --fa-primary-color: #0e396f; --fa-secondary-color: #0e396f;" class="fad fa-spinner-third fa-spin text-center w-full"></span></td></tr>
+                          <tr v-else-if="productos.length == 0" v-cloak><td colspan="6" class="text-center">Sin productos que mostrar</td></tr-->
+                          <tr v-if="revisiones.length == 0"><td colspan="4" class="text-center"><i class=" text-danger fa-solid fa-file-circle-exclamation fa-beat"></i> Sin datos que mostrar</td></tr>
+                          <tr v-else v-for="(revision,i) in revisiones" :key="i" v-cloak>
+                              <td>{{ revision.fecha }}</td>
+                              <td>{{ revision.bastidor[1] }}</td>
+                              <td>{{ revision.mecanico[1] }}</td>
+                              <td>{{ revision.valor_total }}€</td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
