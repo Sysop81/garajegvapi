@@ -48,7 +48,7 @@
                   
 		}
 
-        $msg = count($listResult) == 8 ? 'ok':'error';
+        $msg = count($listResult) == 10 ? 'ok':'error';
 
 
         echo json_encode(['result' => $msg]); 

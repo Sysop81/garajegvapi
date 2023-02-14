@@ -106,6 +106,10 @@
               <!-- Tab consumibles -->
               <div id="consumibles">
                 <div class="row">
+                  <div class="col-12 d-flex align-items-end">
+                    <Button id="updateTableCon" @click.prevent="getConsumibles" name="updateTableCon" class="btn btn-sm btn-primary" data-toggle="tooltip" title="Actualizar tabla"><i class="fa-solid fa-arrows-rotate"></i> <span class="d-none d-md-inline">Actualizar tabla</span></Button>
+                  </div>
+                  <hr class="mt-1">
                   <div class="col-12">
                     <table id="tablaConsumibles" class="table table-font-size">
                       <thead class="thead-color sticky-top">
@@ -116,12 +120,11 @@
                       </tr>
                       </thead>
                       <tbody id="contentTableProduct">
-                          <!--tr v-if="tableLoader"><td colspan="6" class="text-center"><span style="font-size: 2rem; --fa-primary-color: #0e396f; --fa-secondary-color: #0e396f;" class="fad fa-spinner-third fa-spin text-center w-full"></span></td></tr>
-                          <tr v-else-if="productos.length == 0" v-cloak><td colspan="6" class="text-center">Sin productos que mostrar</td></tr-->
-                          <tr v-for="(consumible,i) in consumibles" :key="i" v-cloak>
+                          <tr v-if="consumibles.length == 0"><td colspan="3" class="text-center"><i class=" text-danger fa-solid fa-file-circle-exclamation fa-beat"></i> Sin datos que mostrar</td></tr>   
+                          <tr v-for="(consumible,i) in consumibles" :key="i" v-cloak :class="{ 'text-danger': consumible.disponible != 'si' }">
                               <td>{{ consumible.codigo }}</td>
                               <td>{{ consumible.nombre }}</td>
-                              <td>{{ consumible.pvp }}€</td>
+                              <td>{{ consumible.pvp.toFixed(2) }}€</td>
                           </tr>
                       </tbody>
                   </table>
@@ -131,6 +134,10 @@
               <!-- Tab mecanicos -->
               <div id="mecanicos">
                 <div class="row">
+                  <div class="col-12 d-flex align-items-end">
+                    <Button id="updateTableMec" @click.prevent="getMecanicos" name="updateTableCon" class="btn btn-sm btn-primary" data-toggle="tooltip" title="Actualizar tabla"><i class="fa-solid fa-arrows-rotate"></i> <span class="d-none d-md-inline">Actualizar tabla</span></Button>
+                  </div>
+                  <hr class="mt-1">
                   <div class="col-12">
                     <table id="tablaMecanicos" class="table table-font-size">
                       <thead class="thead-color sticky-top">
@@ -141,8 +148,7 @@
                       </tr>
                       </thead>
                       <tbody id="contentTableMecanicos">
-                          <!--tr v-if="tableLoader"><td colspan="6" class="text-center"><span style="font-size: 2rem; --fa-primary-color: #0e396f; --fa-secondary-color: #0e396f;" class="fad fa-spinner-third fa-spin text-center w-full"></span></td></tr>
-                          <tr v-else-if="productos.length == 0" v-cloak><td colspan="6" class="text-center">Sin productos que mostrar</td></tr-->
+                          <tr v-if="mecanicos.length == 0"><td colspan="3" class="text-center"><i class=" text-danger fa-solid fa-file-circle-exclamation fa-beat"></i> Sin datos que mostrar</td></tr>
                           <tr v-for="(mecanico,i) in mecanicos" :key="i" v-cloak :class="{ 'text-danger': !mecanico.activo }">
                               <td>{{ mecanico.dni }}</td>
                               <td>{{ mecanico.nombre + " " + mecanico.apellido1 + " " + mecanico.apellido2}}</td>
@@ -156,6 +162,10 @@
               <!-- Tab revisiones -->
               <div id="vehiculos">
                 <div class="row">
+                  <div class="col-12 d-flex align-items-end">
+                    <Button id="updateTableMec" @click.prevent="getVehiculos" name="updateTableCon" class="btn btn-sm btn-primary" data-toggle="tooltip" title="Actualizar tabla"><i class="fa-solid fa-arrows-rotate"></i> <span class="d-none d-md-inline">Actualizar tabla</span></Button>
+                  </div>
+                  <hr class="mt-1">
                   <div class="col-12">
                     <table id="tablaVehiculos" class="table table-font-size">
                       <thead class="thead-color sticky-top">
@@ -166,8 +176,7 @@
                       </tr>
                       </thead>
                       <tbody id="contentTableVehiculos">
-                          <!--tr v-if="tableLoader"><td colspan="6" class="text-center"><span style="font-size: 2rem; --fa-primary-color: #0e396f; --fa-secondary-color: #0e396f;" class="fad fa-spinner-third fa-spin text-center w-full"></span></td></tr>
-                          <tr v-else-if="productos.length == 0" v-cloak><td colspan="6" class="text-center">Sin productos que mostrar</td></tr-->
+                          <tr v-if="vehiculos.length == 0"><td colspan="3" class="text-center"><i class=" text-danger fa-solid fa-file-circle-exclamation fa-beat"></i> Sin datos que mostrar</td></tr>
                           <tr v-for="(vehiculo,i) in vehiculos" :key="i" v-cloak :class="{ 'text-danger': !vehiculo.activo }">
                               <td>{{ vehiculo.bastidor }}</td>
                               <td>{{ vehiculo.marca + " " + vehiculo.modelo }}</td>
@@ -181,6 +190,10 @@
               <!-- Tab revisiones -->
               <div id="revisiones">
                 <div class="row">
+                  <div class="col-12 d-flex align-items-end">
+                    <Button id="updateTableMec" @click.prevent="getRevisiones" name="updateTableCon" class="btn btn-sm btn-primary" data-toggle="tooltip" title="Actualizar tabla"><i class="fa-solid fa-arrows-rotate"></i> <span class="d-none d-md-inline">Actualizar tabla</span></Button>
+                  </div>
+                  <hr class="mt-1">
                   <div class="col-12">
                     <table id="tablaRevisiones" class="table table-font-size">
                       <thead class="thead-color sticky-top">

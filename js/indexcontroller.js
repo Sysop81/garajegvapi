@@ -153,7 +153,7 @@ window.onload = function () {
 
                 fetch('../garajegvapi/php/getListConsumibles.php?configuracion=' + JSON.stringify(this.configuracion)).then(async res => {
                     let response = await res.json();
-                    
+                    console.log(response);
                     self.consumibles = response;
                 
                 });
